@@ -1,7 +1,11 @@
 import ntplib
 import socket
 import time
+import datetime
 
+def float_to_hms(seconds):
+    tempo = datetime.timedelta(seconds=seconds)
+    return str(tempo).split(", ")[-1].split(".")[0]
 
 def get_ip():
     return input("Digite o IP para o Servidor: ")
@@ -34,10 +38,10 @@ def start(ip, port):
             decoded_data = data.decode().strip()
 
             if decoded_data.lower() == "time":
-                ntp_time = str(get_ntp_time()).encode()  # Correção aqui
+                ntp_time = str(get_ntp_time()).encode()  
                 server.sendto(ntp_time, client_addr)
-                print(f"Solicitação recebida de {client_addr}: {decoded_data}")
-                print(f"Hora enviada: {ntp_time.decode()} para {client_addr}")
+                print(f"\n\n{client_addr} - Solicitação recebida")
+                print(f"Hora enviada: {ntp_time.decode()} - {float_to_hms(float(ntp_time.decode()))}")
     except Exception as e:
         print(f"Falha no servidor: {e}")
     finally:
